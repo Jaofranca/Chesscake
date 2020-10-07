@@ -1,153 +1,82 @@
-Ôªøusing System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 /*Comando GetComponent:acessamos um objeto do jogo e
-utilizamos alguma caracter√≠stica sua,se acessarmos
-o script,podemos ent√£o modificar algum atributo ou 
-realizar algum m√©todo da classe,logo o getcomponent √© uma 
+utilizamos alguma caracterÌstica sua,se acessarmos
+o script,podemos ent„o modificar algum atributo ou 
+realizar algum mÈtodo da classe,logo o getcomponent È uma 
 maneira de modificar o jogo ao vivo pelo script.
 */
 public class MovePlate : MonoBehaviour {
     //O Script que Controla o Moveplate
 
-    ////Referencias ao Controller
-    public GameObject Controller;
+    ////Referencias ao controller
+    public GameObject controller;
 
-    //A pe√ßa que tem liga√ß√£o com essa moveplate
-    GameObject Reference = null;
+    //A peÁa que tem ligaÁ„o com essa moveplate
+    GameObject reference = null;
 
-    //localiza√ß√£o no tabuleiro
-    int MatrixX;
-    int MatrixY;
+    //localizaÁ„o no tabuleiro
+    int matrixX;
+    int matrixY;
 
-    public bool Castling = false;
     //falso:Movimento;True:Attack
-    public bool Attack = false;
-    public bool DoubleMovePawn = false;
-    public bool EnPassant = false;
+    public bool attack = false;
 
-    
-
-    //Quando o Codigo come√ßa a rodar
+    //Quando o Codigo comeÁa a rodar
     public void Start() {
-        if (Attack) {
+        if (attack) {
             //Muda a cor MovePlate para Vermelho
             gameObject.GetComponent<SpriteRenderer>().color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
-        }else if (Castling) {
-            gameObject.GetComponent<SpriteRenderer>().color = new Color(0.0f, 1.0f, 0.0f, 1.0f);
-        }else if (EnPassant) {
-            gameObject.GetComponent<SpriteRenderer>().color = new Color(0.0f, 1.0f, 1.0f, 1.0f);
         }
     }
     //Quando apertamos no moveplate
     public void OnMouseUp() {
-        
-        Controller = GameObject.FindGameObjectWithTag("GameController");
+        //Encontramos a peÁa com o nome de moveplate
+        controller = GameObject.FindGameObjectWithTag("GameController");
 
-        //Se o Moveplate tiver Attack = true
-        if (Attack) {
-            //pegamos a posi√ß√£o onde o moveplate est√°
-            GameObject cp = Controller.GetComponent<Game>().GetPosition(MatrixX, MatrixY);
-            //se a pe√ßa onde o moveplate est√° for o rei ou rainha preto ou branco,o jogo acaba
-            if (cp.name == "white_king") Controller.GetComponent<Game>().Winner("black");
-            if (cp.name == "black_king") Controller.GetComponent<Game>().Winner("white");
-            //destr√≥i a pe√ßa
+        //Se o Moveplate tiver attack = true
+        if (attack) {
+            //pegamos a posiÁ„o onde o moveplate est·
+            GameObject cp = controller.GetComponent<Game>().GetPosition(matrixX, matrixY);
+            //se a peÁa onde o moveplate est· for o rei ou rainha preto ou branco,o jogo acaba
+            if (cp.name == "white_king") controller.GetComponent<Game>().Winner("black");
+            if (cp.name == "black_king") controller.GetComponent<Game>().Winner("white");
+            //destrÛi a peÁa
             Destroy(cp);
         }
 
-        //Deixa a posi√ß√£o da pe√ßa atual em branco -- SetpositionEmpty(pe√ßa atual.x().y())
-        Controller.GetComponent<Game>().SetPositionEmpty(Reference.GetComponent<Chessman>().GetXBoard(),
-            Reference.GetComponent<Chessman>().GetYBoard());
+      
+        //Deixa a posiÁ„o da peÁa atual em branco -- SetpositionEmpty(peÁa atual.x().y())
+        controller.GetComponent<Game>().SetPositionEmpty(reference.GetComponent<Chessman>().GetXBoard(),
+            reference.GetComponent<Chessman>().GetYBoard());
 
-        if (Castling) {
-            string player = Controller.GetComponent<Game>().GetCurrentPlayer();
-            if(player == "white") {
-                //MatrixX == -2.3 && MatrixY == -2.3
-                if (MatrixX == 0 && MatrixY == 0) {
-                    CastlingMove(2, 3);
-                }
-                else {
-                    CastlingMove(-2,4);
-                }
-            }
-            else {
-                if (MatrixX == 0 && MatrixY == 7) {
-                    CastlingMove(2, 3);
-                }
-                else {
-                    CastlingMove(-2, 4);
-                }
-            }            
-        }
-        if (EnPassant) {
-            GameObject cp = Controller.GetComponent<Game>().GetPosition(MatrixX, MatrixY-1);
-            Destroy(cp);
-            Reference.GetComponent<Chessman>().SetXBoard(MatrixX);
-            Reference.GetComponent<Chessman>().SetYBoard(MatrixY);
-            Reference.GetComponent<Chessman>().SetCoords();
-        }
-        else {
-            //Move a pe√ßa de acordo com o moveplate clicado
-            //Atribui novos valores a pe√ßa de acordo com o x e y do moveplate atual.
-            if (DoubleMovePawn) {
-                Reference.GetComponent<Chessman>().PawnDoubleMove = true;
-            }
-            Reference.GetComponent<Chessman>().SetXBoard(MatrixX);
-            Reference.GetComponent<Chessman>().SetYBoard(MatrixY);
-            Reference.GetComponent<Chessman>().SetCoords();
-        }
-        
-        //Coloca a pe√ßa na posi√ß√£o real do tabuleiro de acordo com o novo X e Y
-        Controller.GetComponent<Game>().SetPosition(Reference);
-        VerifyPromotion();
-        Chessman peca = Reference.GetComponent<Chessman>();
-        peca.Moves += 1;
-        //Controller.GetComponent<Game>().SetUltimaPecaNome(Reference.name);
-        Controller.GetComponent<Game>().SetMoves(MatrixX, MatrixY);
+        //Move a peÁa de acordo com o moveplate clicado
+        //Atribui novos valores a peÁa de acordo com o x e y do moveplate atual.
+        reference.GetComponent<Chessman>().SetXBoard(matrixX);
+        reference.GetComponent<Chessman>().SetYBoard(matrixY);
+        reference.GetComponent<Chessman>().SetCoords();
+
+        //Coloca a A peÁa na posiÁ„o real do tabuleiro de acordo com o novo X e Y
+        controller.GetComponent<Game>().SetPosition(reference);
+
         //Troca de jogador
-        Controller.GetComponent<Game>().NextTurn();
+        controller.GetComponent<Game>().NextTurn();
 
         //Destroi as moveplates existentes,incluindo a atual
-        Reference.GetComponent<Chessman>().DestroyMovePlates();
+        reference.GetComponent<Chessman>().DestroyMovePlates();
     }
     
     public void SetCoords(int x, int y) {
-        MatrixX = x;
-        MatrixY = y;
+        matrixX = x;
+        matrixY = y;
     }
-    //A pe√ßa que tem rela√ß√£o com essa moveplate
+    //A peÁa que tem relaÁ„o com essa moveplate
     public void SetReference(GameObject obj) {
-        Reference = obj;
+        reference = obj;
     }
 
     public GameObject GetReference() {
-        return Reference;
-    }
-    void VerifyPromotion() {
-        Sprite sprite= Reference.GetComponent<Chessman>().white_queen;
-        if (Reference.name == "white_pawn") {
-            int x = Reference.GetComponent<Chessman>().GetXBoard();
-            int y = Reference.GetComponent<Chessman>().GetYBoard();
-            if (y == 7) {
-                Reference.GetComponent<SpriteRenderer>().sprite = sprite;
-                Reference.GetComponent<Chessman>().name = "white_queen";
-                
-
-            }
-        }
-        //this.GetComponent<SpriteRenderer>().sprite = black_queen
-
-
-    }
-    void CastlingMove(int offset,int newPosition) {
-        GameObject torre1 = Controller.GetComponent<Game>().GetPosition(MatrixX, MatrixY);
-        Controller.GetComponent<Game>().SetPositionEmpty(MatrixX, MatrixY);
-        Reference.GetComponent<Chessman>().SetXBoard(MatrixX + offset);
-        Reference.GetComponent<Chessman>().SetYBoard(MatrixY);
-        Reference.GetComponent<Chessman>().SetCoords();
-        torre1.GetComponent<Chessman>().SetXBoard(newPosition);
-        torre1.GetComponent<Chessman>().SetYBoard(MatrixY);
-        torre1.GetComponent<Chessman>().SetCoords();
-        torre1.GetComponent<Chessman>().Moves += 1;
+        return reference;
     }
 }
