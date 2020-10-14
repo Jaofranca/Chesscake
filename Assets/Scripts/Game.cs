@@ -1,121 +1,137 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Chesscake.Providers;
+using Chesscake.Enumerations;
+using TMPro;
 /*Comando GetComponent:acessamos um objeto do jogo e
-utilizamos alguma caracterÌstica sua,se acessarmos
-o script,podemos ent„o modificar algum atributo ou 
-realizar algum mÈtodo da classe,logo o getcomponent È uma 
+utilizamos alguma caracter√≠stica sua,se acessarmos
+o script,podemos ent√£o modificar algum atributo ou 
+realizar algum m√©todo da classe,logo o getcomponent √© uma 
 maneira de modificar o jogo ao vivo pelo script.
 */
 //Script que toma conta do jogo em Si
 public class Game : MonoBehaviour {
-
-
-    //PeÁa de Referencia
-    public GameObject chesspiece;
-
-    //O tabuleiro vai ser uma matriz de posiÁıes,matrix 8 por 8
-    private GameObject[,] positions = new GameObject[8, 8];
-    //Array de peÁas do jogador preto e branco respectivamente
-    private GameObject[] playerBlack = new GameObject[16];
-    private GameObject[] playerWhite = new GameObject[16];
-
-    //Turno atual,comeÁa no branco mas dps posso randomizar
-    private string currentPlayer = "white";
-
+    //Pe√ßa de Referencia
+    public GameObject ChessPiece;
+    public PieceProvider provider;
+    public GameObject panel;
+    //O tabuleiro vai ser uma matriz de posi√ß√µes,matrix 8 por 8
+    private GameObject[,] Positions = new GameObject[8, 8];
+    //Array de pe√ßas do jogador preto e branco respectivamente
+    private GameObject[] PlayerBlack = new GameObject[16];
+    private GameObject[] PlayerWhite = new GameObject[16];
+    public int countPecas;
+    //ultima pe√ßa movida
+    public int[] LastMoves = new int[2]; 
+    public void SetMoves(int x, int y) {
+        LastMoves[0] = x;
+        LastMoves[1] = y;
+    }
+    //Turno atual,come√ßa no branco mas dps posso randomizar
+    private string CurrentPlayer = "white";
     //Fim de jogo
-    private bool gameOver = false;
-
-    //Quando o jogo comeÁa essa funÁ„o È chamada
+    private bool GameOver = false;
+    //Quando o jogo come√ßa essa fun√ß√£o √© chamada
     public void Start() {
-        //Cria cada peÁa com seu x e y
-        playerWhite = new GameObject[] { Create("white_rook", 0, 0), Create("white_knight", 1, 0),
-            Create("white_bishop", 2, 0), Create("white_queen", 3, 0), Create("white_king", 4, 0),
-            Create("white_bishop", 5, 0), Create("white_knight", 6, 0), Create("white_rook", 7, 0),
-            Create("white_pawn", 0, 1), Create("white_pawn", 1, 1), Create("white_pawn", 2, 1),
-            Create("white_pawn", 3, 1), Create("white_pawn", 4, 1), Create("white_pawn", 5, 1),
-            Create("white_pawn", 6, 1), Create("white_pawn", 7, 1) };
-        playerBlack = new GameObject[] { Create("black_rook", 0, 7), Create("black_knight",1,7),
-            Create("black_bishop",2,7), Create("black_queen",3,7), Create("black_king",4,7),
-            Create("black_bishop",5,7), Create("black_knight",6,7), Create("black_rook",7,7),
-            Create("black_pawn", 0, 6), Create("black_pawn", 1, 6), Create("black_pawn", 2, 6),
-            Create("black_pawn", 3, 6), Create("black_pawn", 4, 6), Create("black_pawn", 5, 6),
-            Create("black_pawn", 6, 6), Create("black_pawn", 7, 6) };
-
-        //Coloca cada peÁa na matriz
-        for (int i = 0; i < playerBlack.Length; i++) {
-            SetPosition(playerBlack[i]);
-            SetPosition(playerWhite[i]);
+        provider = FindObjectOfType<PieceProvider>();
+        panel = GameObject.Find("EndGamePanel");
+        panel.SetActive(false);
+        //Cria cada pe√ßa com seu x e y
+        PlayerWhite = new GameObject[] { provider.Create("white_rook1", 0, 0,TiposPeca.rook),
+            provider.Create("white_knight1", 1, 0,TiposPeca.knight),provider.Create("white_bishop1", 2, 0,TiposPeca.bishop)
+            ,provider.Create("white_queen1", 3, 0,TiposPeca.queen),
+            provider.Create("white_king1", 4, 0,TiposPeca.king),
+            provider.Create("white_bishop2", 5, 0,TiposPeca.bishop), provider.Create("white_knight2", 6, 0,TiposPeca.knight),
+            provider.Create("white_rook2", 7, 0,TiposPeca.rook),
+            provider.Create("white_pawn1", 0, 1,TiposPeca.white_pawn), 
+            provider.Create("white_pawn2", 1, 1,TiposPeca.white_pawn), provider.Create("white_pawn3", 2, 1,TiposPeca.white_pawn),
+            provider.Create("white_pawn4", 3, 1,TiposPeca.white_pawn), provider.Create("white_pawn5", 4, 1,TiposPeca.white_pawn),
+            provider.Create("white_pawn6", 5, 1,TiposPeca.white_pawn),provider.Create("white_pawn7", 6, 1,TiposPeca.white_pawn), 
+            provider.Create("white_pawn8", 7, 1,TiposPeca.white_pawn) 
+        };
+        PlayerBlack = new GameObject[] { provider.Create("black_rook1", 0, 7,TiposPeca.rook),
+            provider.Create("black_knight1",1,7,TiposPeca.knight),provider.Create("black_bishop1",2,7,TiposPeca.bishop), 
+            provider.Create("black_queen1",3,7,TiposPeca.queen),
+            provider.Create("black_king1",4,7,TiposPeca.king),
+            provider.Create("black_bishop2",5,7,TiposPeca.bishop), provider.Create("black_knight2",6,7,TiposPeca.knight),
+            provider.Create("black_rook2",7,7,TiposPeca.rook)
+            ,provider.Create("black_pawn1", 0, 6,TiposPeca.black_pawn), provider.Create("black_pawn2", 1, 6,TiposPeca.black_pawn), 
+            provider.Create("black_pawn3", 2, 6,TiposPeca.black_pawn),provider.Create("black_pawn4", 3, 6,TiposPeca.black_pawn), 
+            provider.Create("black_pawn5", 4, 6,TiposPeca.black_pawn), provider.Create("black_pawn6", 5, 6,TiposPeca.black_pawn),
+            provider.Create("black_pawn7", 6, 6,TiposPeca.black_pawn), provider.Create("black_pawn8", 7, 6,TiposPeca.black_pawn) 
+        };
+        //Coloca cada pe√ßa na matriz
+        for (int i = 0; i < PlayerBlack.Length; i++) {
+            SetPosition(PlayerBlack[i]);
+            SetPosition(PlayerWhite[i]);
         }
+        
     }
-
-    public GameObject Create(string name, int x, int y) {
-        GameObject obj = Instantiate(chesspiece, new Vector3(0, 0, -1), Quaternion.identity);
-        Chessman cm = obj.GetComponent<Chessman>(); //We have access to the GameObject, we need the script
-        cm.name = name; //This is a built in variable that Unity has, so we did not have to declare it before
-        cm.SetXBoard(x);
-        cm.SetYBoard(y);
-        cm.Activate(); //It has everything set up so it can now Activate()
-        return obj;
-    }
-    //Coloca as peÁas na matriz
+    //Coloca as pe√ßas na matriz
     public void SetPosition(GameObject obj) {
         Chessman cm = obj.GetComponent<Chessman>();
 
-        //sobrescreve o espaÁo vazio ou qualquer coisa que esteja la
-        //adiciona no x e y a peÁa de xadrez.
-        positions[cm.GetXBoard(), cm.GetYBoard()] = obj;
+        //sobrescreve o espa√ßo vazio ou qualquer coisa que esteja la
+        //adiciona no x e y a pe√ßa de xadrez.
+        Positions[cm.GetXBoard(), cm.GetYBoard()] = obj;
     }
-    //Deixa a posiÁ„o nula
+    //Deixa a posi√ß√£o nula
     public void SetPositionEmpty(int x, int y) {
-        positions[x, y] = null;
+        Positions[x, y] = null;
     }
 
     public GameObject GetPosition(int x, int y) {
-        return positions[x, y];
+        return Positions[x, y];
     }
-    //verifica se a posiÁ„o existe de verdade
+    //verifica se a posi√ß√£o existe de verdade
     public bool PositionOnBoard(int x, int y) {
-        if (x < 0 || y < 0 || x >= positions.GetLength(0) || y >= positions.GetLength(1)) return false;
+        if (x < 0 || y < 0 || x >= Positions.GetLength(0) || y >= Positions.GetLength(1)) return false;
         return true;
     }
 
     public string GetCurrentPlayer() {
-        return currentPlayer;
+        return CurrentPlayer;
     }
     //verifica se o jogo acabou
     public bool IsGameOver() {
-        return gameOver;
+        return GameOver;
     }
-    //funÁ„o que muda de turno basicamente mudando o player atual
+    //fun√ß√£o que muda de turno basicamente mudando o player atual
     public void NextTurn() {
-        if (currentPlayer == "white") {
-            currentPlayer = "black";
+        if (CurrentPlayer == "white") {
+            CurrentPlayer = "black";    
         }
         else {
-            currentPlayer = "white";
+            CurrentPlayer = "white";
+            
         }
+    
     }
-    //funÁ„o que da update a cada frame
+    //fun√ß√£o que da update a cada frame
     public void Update() {
-        //se o jogo acabou e o player apertou um bot„o
-        if (gameOver == true && Input.GetMouseButtonDown(0)) {
-            gameOver = false;
+        /*if (GameOver == true && Input.GetMouseButtonDown(0)) {
+            GameOver = false;
             //jogo reinicia carregando a tela denovo
-           
             SceneManager.LoadScene("Game"); 
-        }
+        }*/
     }
     //Verifica o vencedor(precisa de ajustes pois tem problema com texto)
     public void Winner(string playerWinner) {
-        gameOver = true;
-
+        GameOver = true;
+        panel.SetActive(true);
+        if (playerWinner == "white") {
+            GameObject.FindGameObjectWithTag("WinnerText").GetComponent<TextMeshProUGUI>().text = AskPlayerName.playername1;
+        }
+        else{
+            GameObject.FindGameObjectWithTag("WinnerText").GetComponent<TextMeshProUGUI>().text = AskPlayerName.playername2;
+        }
+        
         //Using UnityEngine.UI is needed here
-        GameObject.FindGameObjectWithTag("WinnerText").GetComponent<Text>().enabled = true;
-        GameObject.FindGameObjectWithTag("WinnerText").GetComponent<Text>().text = playerWinner + " is the winner";
-
-        GameObject.FindGameObjectWithTag("RestartText").GetComponent<Text>().enabled = true;
+        /*GameObject.FindGameObjectWithTag("WinnerText").GetComponent<Text>().enabled = true;
+        
+        GameObject.FindGameObjectWithTag("RestartText").GetComponent<Text>().enabled = true;*/
     }
 }

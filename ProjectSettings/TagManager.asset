@@ -9,6 +9,8 @@ TagManager:
   - LoserTag
   - RestartText
   - WinnerText
+  - PromotionPanel
+  - movePlateSpawner
   layers:
   - Default
   - TransparentFX

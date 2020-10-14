@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 7947537499161475075}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.65, y: -0.32, z: -2}
-  m_LocalScale: {x: 3, y: 3, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -72,12 +72,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: a252c469fe2286741adb9c46aaa20d8a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: de71c9853b24e2148808f939f6ca0b03, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.2, y: 0.2}
+  m_Size: {x: 0.3, y: 0.64}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -95,21 +95,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a3ec3390f1511d4f8c941bafc520171, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: {fileID: 0}
-  movePlate: {fileID: 2715638077675507218, guid: 45f6d44b28ec3514394161147eed4bc0,
+  Controller: {fileID: 0}
+  MovePlate: {fileID: 2715638077675507218, guid: 45f6d44b28ec3514394161147eed4bc0,
     type: 3}
-  black_queen: {fileID: 21300000, guid: b6218a6ae099ea548a403e00f01774f2, type: 3}
-  black_king: {fileID: 21300000, guid: a252c469fe2286741adb9c46aaa20d8a, type: 3}
-  black_knight: {fileID: 21300000, guid: 3f83e12726f6ba84fac41c501523a4c6, type: 3}
-  black_bishop: {fileID: 21300000, guid: 15fec5fb837768643a1768fe10d90cb0, type: 3}
-  black_rook: {fileID: 21300000, guid: e0b1f15c88f16314a9c01013029c5318, type: 3}
-  black_pawn: {fileID: 21300000, guid: 2a0c55fcf56e5dc4e845d2a69ee4cce7, type: 3}
-  white_queen: {fileID: 21300000, guid: b626afc258ec5fb4195dcb7d7bfe8848, type: 3}
-  white_king: {fileID: 21300000, guid: f24a1edc66b3d6d4aa3b2fa20ea1e38c, type: 3}
-  white_knight: {fileID: 21300000, guid: 9cd66c00b35034c468d3870994342ff1, type: 3}
-  white_bishop: {fileID: 21300000, guid: 69221be5e3860ab4e945eb874371d8dc, type: 3}
-  white_rook: {fileID: 21300000, guid: 21e3d51a47b65d348b1004ad9d90715d, type: 3}
-  white_pawn: {fileID: 21300000, guid: dd45137b61ad39947b9145dec1cc4104, type: 3}
+  movePlateSpawner: {fileID: 0}
+  movePlateUtilitaries: {fileID: 0}
+  Moves: 0
+  PawnDoubleMove: 0
+  black_queen: {fileID: 21300000, guid: c164fb15d39ba534fb7876a48b745974, type: 3}
+  black_knight: {fileID: 21300000, guid: 4289e4822a1d018499ba0c801f21e07d, type: 3}
+  black_bishop: {fileID: 21300000, guid: a052b4c43ee71e74c82ec699d94deaee, type: 3}
+  black_king: {fileID: 21300000, guid: 43e70e9a61a236f419b17305c2160a6f, type: 3}
+  black_rook: {fileID: 21300000, guid: 24f0bacc3b561434eb4f526fa5c10647, type: 3}
+  black_pawn: {fileID: 21300000, guid: de71c9853b24e2148808f939f6ca0b03, type: 3}
+  white_queen: {fileID: 21300000, guid: 615ed9d9e4eb48a4380a45a77d309ad2, type: 3}
+  white_knight: {fileID: 21300000, guid: ba8286bed0b1aea4d884746c114fe5a9, type: 3}
+  white_bishop: {fileID: 21300000, guid: 03b9e75ef3c07b24db18c13f4bc576ca, type: 3}
+  white_king: {fileID: 21300000, guid: 0ffa6581196f6c449bdbbc2eec3bf57a, type: 3}
+  white_rook: {fileID: 21300000, guid: 6e281ef561a62cd42a838698bdbaefda, type: 3}
+  white_pawn: {fileID: 21300000, guid: b336698600e2f864eb0ab3904103b2c5, type: 3}
 --- !u!61 &6339193482150055031
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -127,12 +131,12 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.2, y: 0.2}
-    newSize: {x: 0.2, y: 0.2}
+    oldSize: {x: 0.3, y: 0.64}
+    newSize: {x: 0.3, y: 0.64}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.2, y: 0.2}
+  m_Size: {x: 0.5, y: 0.5}
   m_EdgeRadius: 0
