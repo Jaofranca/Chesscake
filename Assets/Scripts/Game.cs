@@ -23,13 +23,9 @@ public class Game : MonoBehaviour {
     //Array de peças do jogador preto e branco respectivamente
     private GameObject[] PlayerBlack = new GameObject[16];
     private GameObject[] PlayerWhite = new GameObject[16];
-    public int countPecas;
+
     //ultima peça movida
     public int[] LastMoves = new int[2]; 
-    public void SetMoves(int x, int y) {
-        LastMoves[0] = x;
-        LastMoves[1] = y;
-    }
     //Turno atual,começa no branco mas dps posso randomizar
     private string CurrentPlayer = "white";
     //Fim de jogo
@@ -81,6 +77,10 @@ public class Game : MonoBehaviour {
     //Deixa a posição nula
     public void SetPositionEmpty(int x, int y) {
         Positions[x, y] = null;
+    }
+    public void SetMoves(int x, int y) {
+        LastMoves[0] = x;
+        LastMoves[1] = y;
     }
 
     public GameObject GetPosition(int x, int y) {
