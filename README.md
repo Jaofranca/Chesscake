@@ -17,6 +17,6 @@ Tela do jogo        |  Tela final
 
 ## Participants on this project
 - [@JaoFranca](https://github.com/Jaofranca)/João Victor França as the lead programmer
-- [@JVMoreiraD](https://github.com/JVMoreiraD)/João Victor Moreira made the screens and some functionalities
+- [@JVMoreiraD](https://github.com/JVMoreiraD)/João Vitor Moreira made the screens and some functionalities
 - [@SouKlaus](https://github.com/SouKlaus)/Klaus pereira as the designer 
 
